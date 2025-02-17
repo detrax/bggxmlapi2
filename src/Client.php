@@ -12,6 +12,10 @@ class Client
 
     public function getThing(int $id, bool $stats = false): ?Thing
     {
+        if (empty($id)) {
+            return null;
+        }
+
         $xml = $this->request('thing', [
             'id' => $id,
             'stats' => $stats,
@@ -25,6 +29,10 @@ class Client
      */
     public function getThings(array $ids, bool $stats = false): array
     {
+        if (empty($ids)) {
+            return [];
+        }
+
         $xml = $this->request('thing', [
             'id' => join(',', $ids),
             'stats' => $stats,
@@ -113,7 +121,7 @@ class Client
 
     protected function request(string $action, array $params = []): \SimpleXMLElement
     {
-        $url = sprintf('%s/%s?%s', self::API_URL, $action, http_build_query($params));
+        $url = sprintf('%s/%s?%s', self::API_URL, $action, http_build_query(array_filter($params)));
         $xml = simplexml_load_file($url);
         if (!$xml instanceof \SimpleXMLElement) {
             throw new Exception('API call failed');

@@ -35,6 +35,12 @@ class ClientTest extends TestCase
             $this->assertInstanceOf(BoardGameGeek\Thing::class, $thing);
             $this->assertContains($thing->getName(), [ 'Zona: The Secret of Chernobyl', 'Dream Home' ]);
         }
+
+        $things = $client->getThings([ '111111111111111111111', '222222222222222222' ], true);
+        $this->assertCount(0, $things);
+
+        $things = $client->getThings([], true);
+        $this->assertCount(0, $things);
     }
 
     /**
